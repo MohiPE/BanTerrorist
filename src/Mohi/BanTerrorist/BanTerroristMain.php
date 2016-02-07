@@ -32,8 +32,7 @@ class BanTerroristMain extends PluginBase implements Listener {
 		$player = $event->getPlayer();
 		$uuid = $player->getClientId();
 		$reason = "당신은 비매너 유저입니다.";
-		if($uuid == $this->banDB[$player->getPlayer()])
-			$event->setKickMessage($reason)
+		/*
 		for($i = 0;$i < count($this->terrorist);$i++) {
 			 if($this->terrorist[i] == $player->getAddress()) {
 				$this->getServer()->broadcastMessage( TextFormat::RED ."[BanTerrorist]테러범이 접속하였습니다.");
@@ -43,19 +42,27 @@ class BanTerroristMain extends PluginBase implements Listener {
 				$this->getServer()->broadcastMessage( TextFormat::RED ."[BanTerrorist]기기밴 완료");
 				return true;
 			 }
+		} */
+		foreach($this->banDB as $list) {
+			if($list == $uuid) {
+				$event->setKickMessage($reason);
+				$event->setCancelled();
+			}
+		}
+		foreach($this->terrorist as $list) {
+			if($list == $player->getAddress()) {
+				$this->getServer()->broadcastMessage( TextFormat::RED ."[BanTerrorist] 비매너 플레이어가 접속하였습니다.");
+				$this->getServer()->broadcastMessage( TextFormat::RED ."[BanTerrorist] 곧 기기밴 됩니다.");
+				$event->setKickMessage($reason);
+				$this->banDB[$player->getName()] = $uuid;
+				$event->setCancelled();
+				//UUIDBan::getInstance()->AddBan($player, $reason);
+				$this->getServer()->broadcastMessage( TextFormat::RED ."[BanTerrorist] 기기밴 완료");
+			}
 		}
 		public function loadDB() {
 			$this->banDB = new Config($this->getDataFolder()."BanDB.yml",Config::YAML);
 		}
-		/*foreach($this->terrorist as $list) {
-			if($this->terrorist[$list] == $player->getAddress()) {
-				$this->getServer()->broadcastMessage( TextFormat::RED ."[서버]테러범이 접속하였습니다.");
-				$this->getServer()->broadcastMessage( TextFormat::RED ."[서버]곧 기기밴 됩니다.");
-				UUIDBan::getInstance()->AddBan($player, $reason);
-				$this->getServer()->broadcastMessage( TextFormat::RED ."[서버]기기밴 완료");
-				return true;
-			}
-		}*/
 	}
 }
 ?>
