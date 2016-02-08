@@ -17,7 +17,7 @@ class BanTerroristMain extends PluginBase implements Listener {
 	public function OnEnable() {
 		$this->getLogger()->alert("Made By Mohi(물외한인)");
 		$this->loadDB();
-		$this->terrorist = json_decode(Utils::getURL("https://raw.githubusercontent.com/Stabind/MohiPE/master/ip.json"), true);
+		
 		/*$cheakUUIDBan = $this->getServer()->getPluginManager()->getPlugin("UUIDBan");
 		if($cheakUUIDBan == NULL){
 			$this->getLogger()->alert("마루님의 UUIDBan 플러그인이 존재하지 않습니다!");
@@ -55,14 +55,21 @@ class BanTerroristMain extends PluginBase implements Listener {
 				$this->getServer()->broadcastMessage( TextFormat::RED ."[BanTerrorist] 곧 기기밴 됩니다.");
 				$event->setKickMessage($reason);
 				$this->banDB[$player->getName()] = $uuid;
+				$this->save("BanDB.yml", $this->banDB, true);
 				$event->setCancelled();
 				//UUIDBan::getInstance()->AddBan($player, $reason);
 				$this->getServer()->broadcastMessage( TextFormat::RED ."[BanTerrorist] 기기밴 완료");
 			}
 		}
-		public function loadDB() {
-			$this->banDB = new Config($this->getDataFolder()."BanDB.yml",Config::YAML);
-		}
+	public function loadDB() {
+		$this->banDB = (new Config($this->getDataFolder()."BanDB.yml",Config::YAML))->getAll();
+		$this->terrorist = json_decode(Utils::getURL("https://raw.githubusercontent.com/Stabind/MohiPE/master/ip.json"), true);
+	}
+
+ public function save($db, $param, $async = false) {
+	$dbsave = (new Config ($this->getDataFolder().$db, Config::YAML));
+	$dbsave->setAll($param);
+	$dbsave->save($async);
 	}
 }
 ?>
