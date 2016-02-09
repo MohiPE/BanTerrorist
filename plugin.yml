@@ -1,6 +1,6 @@
 name: BanTerrorist
-main: Mohi\BanTerrorist\BanTerroristMain
-version: "2.0"
+main: Mohi\BanTerrorist\BanTerrorist
+version: "2.1"
 author: "물외한인(Mohi)"
 api:
 - 1.12.0

@@ -11,24 +11,16 @@ use pocketmine\Player;
 use pocketmine\utils\Utils;
 use pocketmine\utils\Config;
 
-class BanTerroristMain extends PluginBase implements Listener {
+class BanTerrorist extends PluginBase implements Listener {
 	public $terrorist, $banDB;
 	
 	public function OnEnable() {
 		$this->getLogger()->alert("Made By Mohi(물외한인)");
 		$this->loadDB();
-		
-		/*$cheakUUIDBan = $this->getServer()->getPluginManager()->getPlugin("UUIDBan");
-		if($cheakUUIDBan == NULL){
-			$this->getLogger()->alert("마루님의 UUIDBan 플러그인이 존재하지 않습니다!");
-			$this->getLogger()->alert("플러그인을 비활성화 합니다");
-			$this->getServer()->getPluginManager()->disablePlugin($this);
-			return false;
-		}*/
 		$this->getServer()->getPluginManager()->registerEvents($this, $this);
 	}
 	
-	 public function onLogin(PlayerPreLoginEvent $event){
+	public function onLogin(PlayerPreLoginEvent $event){
 		$player = $event->getPlayer();
 		$uuid = $player->getClientId();
 		$reason = "당신은 비매너 유저입니다.";
@@ -40,13 +32,13 @@ class BanTerroristMain extends PluginBase implements Listener {
 				$this->banDB[$player->getName()] = $uuid;
 				// UUIDBan::getInstance()->AddBan($player, $reason);
 				$this->getServer()->broadcastMessage( TextFormat::RED ."[BanTerrorist]기기밴 완료");
-				return true;
 			 }
 		} */
 		foreach($this->banDB as $list) {
 			if($list == $uuid) {
 				$event->setKickMessage($reason);
 				$event->setCancelled();
+				return;
 			}
 		}
 		foreach($this->terrorist as $list) {
@@ -67,9 +59,9 @@ class BanTerroristMain extends PluginBase implements Listener {
 	}
 
  public function save($db, $param, $async = false) {
-	$dbsave = (new Config ($this->getDataFolder().$db, Config::YAML));
-	$dbsave->setAll($param);
-	$dbsave->save($async);
+		$dbsave = (new Config ($this->getDataFolder().$db, Config::YAML));
+		$dbsave->setAll($param);
+		$dbsave->save($async);
 	}
 }
 ?>
