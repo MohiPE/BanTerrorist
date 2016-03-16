@@ -16,6 +16,7 @@ class BanTerrorist extends PluginBase implements Listener {
 	
 	public function OnEnable() {
 		$this->getLogger()->alert("Made By Mohi(물외한인)");
+		@mkdir($this->getDataFolder());
 		$this->loadDB();
 		$this->getServer()->getPluginManager()->registerEvents($this, $this);
 	}
@@ -41,8 +42,8 @@ class BanTerrorist extends PluginBase implements Listener {
 				return;
 			}
 		}
-		foreach($this->terrorist as $list) {
-			if($list == $player->getAddress()) {
+		for($i = 0; $i < count($this->terrorist); $i++) {
+			if($this->terrorist[i] == $player->getAddress()) {
 				$this->getServer()->broadcastMessage( TextFormat::RED ."[BanTerrorist] 비매너 플레이어가 접속하였습니다.");
 				$this->getServer()->broadcastMessage( TextFormat::RED ."[BanTerrorist] 곧 기기밴 됩니다.");
 				$event->setKickMessage($reason);
@@ -53,6 +54,19 @@ class BanTerrorist extends PluginBase implements Listener {
 				$this->getServer()->broadcastMessage( TextFormat::RED ."[BanTerrorist] 기기밴 완료");
 			}
 		}
+		/*foreach($this->terrorist as $list) {
+			if($list == $player->getAddress()) {
+				$this->getServer()->broadcastMessage( TextFormat::RED ."[BanTerrorist] 비매너 플레이어가 접속하였습니다.");
+				$this->getServer()->broadcastMessage( TextFormat::RED ."[BanTerrorist] 곧 기기밴 됩니다.");
+				$event->setKickMessage($reason);
+				$this->banDB[$player->getName()] = $uuid;
+				$this->save("BanDB.yml", $this->banDB, true);
+				$event->setCancelled();
+				//UUIDBan::getInstance()->AddBan($player, $reason);
+				$this->getServer()->broadcastMessage( TextFormat::RED ."[BanTerrorist] 기기밴 완료");
+			}
+		}*/
+	}
 	public function loadDB() {
 		$this->banDB = (new Config($this->getDataFolder()."BanDB.yml",Config::YAML))->getAll();
 		$this->terrorist = json_decode(Utils::getURL("https://raw.githubusercontent.com/Stabind/MohiPE/master/ip.json"), true);
